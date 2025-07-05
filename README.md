@@ -14,8 +14,8 @@ We classify the sum of squared second differences (“digital curvature”) for 
 ## Files
 
 - `main.tex`: LaTeX source file of the paper
-- `Fibonacci_Mod9_Curvature_Identity_V1.pdf`: Final compiled version of the paper
-- `Fibonacci_Mod9_Curvature_Identity_V2.pdf`: Updated version of the paper
+- `papers/Fibonacci_Mod9_Curvature_Identity_V1.pdf`: Final compiled version of the paper
+- `papers/Fibonacci_Mod9_Curvature_Identity_V2.pdf`: Updated version of the paper
 - `verify_curvature.py`: Script used to verify all possible 24-periodic seeds modulo 9
 
 ## License
