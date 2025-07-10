@@ -15,6 +15,7 @@ We classify the sum of squared second differences (“digital curvature”) for 
 
 - `papers/v1/`: Version 1 of the paper (LaTeX source and PDF)
 - `papers/v2/`: Version 2 of the paper (LaTeX source and PDF)
+- `papers/v3/`: Version 3 of the paper (LaTeX source and PDF)
 - `verify_curvature.py`: Script used to verify all possible 24-periodic seeds modulo 9
 
 ## License
