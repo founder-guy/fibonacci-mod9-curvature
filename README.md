@@ -31,8 +31,9 @@ curvature* — the sum of squared discrete second differences. The paper makes t
 
 - `papers/v5/` — **current version** (source and PDF). Corrects errors in V4 found by an
   independent fact-check; see the revision history in the paper. Includes `reproduce.py`,
-  which asserts every numerical claim in V5 over the stated ranges. Not yet deposited on
-  Zenodo. **Supersedes V1–V4.**
+  which asserts every numerical claim in V5 over the stated ranges. On Zenodo as
+  [10.5281/zenodo.23687697](https://doi.org/10.5281/zenodo.23687697) (Version 5 DOI).
+  **Supersedes V1–V4.**
 - `papers/v4/` — Version 4 (source and PDF). Superseded: its claims that the curvature
   maximizer is always the most near-Nyquist orbit, that raw residues give a different S
   modulo 9, and that every claim was verified by two independent implementations are
