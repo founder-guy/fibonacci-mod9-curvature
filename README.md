@@ -16,33 +16,41 @@ curvature* — the sum of squared discrete second differences. The paper makes t
 1. **Trichotomy (modulo 9).** Over the 72 full-period seeds the curvature takes exactly
    three values — 648, 972, 1296 — each on 24 seeds. The maximum 1296 belongs precisely to
    the classical Fibonacci cycle (1,1) and its rotations. This is proved by exhaustive
-   enumeration.
+   enumeration. Modulo 9 the 0 → 9 display rule does not matter: raw residues 0–8 give the
+   same three values, because every orbit negates itself after half a period.
 2. **Spectral reformulation.** Curvature is the squared norm of the cyclic second-difference
    (circulant) operator, so it has an exact Fourier form, S = (16/N) Σ sin⁴(πk/N) |d̂ₖ|².
-   It is a high-pass energy: the Fibonacci orbit maximizes it because it is the most
-   high-frequency of the three classes (≈98% of its energy is near Nyquist). The same lens
-   shows the maximality is a small-modulus phenomenon (it fails for 40 of the 118 moduli
-   ≤ 120 with even Pisano period, first at m = 15, 33, 40) and retires the earlier
-   conjecture S_max = m(π(m)/2)², which holds only at m = 9 and 27.
+   It is a high-pass energy, and modulo 9 the Fibonacci class is the one with the most of
+   its curvature near Nyquist (≈98%). That describes the maximizer but does not explain it:
+   at other moduli the near-Nyquist energy does not identify the maximizing orbit. The
+   maximality itself is a small-modulus phenomenon (it fails for 40 of the 118 moduli
+   ≤ 120 with even Pisano period, first at m = 15, 33, 40), and the earlier conjecture
+   S_max = m(π(m)/2)² holds only at m = 9 and 27 among the moduli ≤ 300 checked.
 
-## Versions
+## Repository layout
 
-- `papers/v4/` — **current version.** Spectral reformulation; corrects errors in V1–V3
-  (see the revision history / errata in the paper). Includes `reproduce.py`, which
-  reproduces and asserts every numerical claim. **Supersedes V1–V3.**
+- `papers/v5/` — **current version** (source and PDF). Corrects errors in V4 found by an
+  independent fact-check; see the revision history in the paper. Includes `reproduce.py`,
+  which asserts every numerical claim in V5 over the stated ranges. Not yet deposited on
+  Zenodo. **Supersedes V1–V4.**
+- `papers/v4/` — Version 4 (source and PDF). Superseded: its claims that the curvature
+  maximizer is always the most near-Nyquist orbit, that raw residues give a different S
+  modulo 9, and that every claim was verified by two independent implementations are
+  false or overstated.
 - `papers/v3/`, `papers/v2/`, `papers/v1/` — earlier versions, retained as the historical
   record. **Note:** these contain a non-rigorous "proof" of the trichotomy, a false
   half-period symmetry argument (V2), and the false conjecture S_max = m(π(m)/2)²; all are
-  corrected in V4.
+  corrected in V4 and V5.
+- `verify_curvature.py` — the original modulo-9 trichotomy check that accompanies V1–V3.
 
 ## Reproducing the results
 
 ```
-python3 papers/v4/reproduce.py    # reproduces and asserts every Version 4 claim
-python3 verify_curvature.py       # original modulo-9 trichotomy check
+python3 papers/v5/reproduce.py                # asserts every Version 5 claim
+python3 verify_curvature.py                   # original modulo-9 trichotomy check
 ```
 
-Both use only the Python standard library.
+All use only the Python standard library and run in seconds.
 
 ## License
 

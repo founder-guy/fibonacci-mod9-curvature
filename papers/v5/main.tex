@@ -1,0 +1,546 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{amsthm}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{booktabs}
+\geometry{margin=1in}
+\setlength{\emergencystretch}{2em} % lets TeX loosen a line rather than overrun the margin
+
+\title{A Curvature Identity for the Fibonacci Digital-Root Cycle Modulo~9}
+
+\author{Guy Rinzema\\
+Independent researcher\\
+\texttt{guy.rinzema@icloud.com}}
+
+\date{October 2026 (Version 5)}
+
+%--- theorem environments
+\newtheorem{thm}{Theorem}
+\newtheorem{prop}{Proposition}
+\theoremstyle{remark}
+\newtheorem{rem}{Remark}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For each seed we form the $24$-periodic orbit of the Fibonacci recurrence modulo~$9$,
+write its terms with the digital-root convention $0\mapsto 9$, and measure its
+\emph{digital curvature} $S=\sum_n \kappa_n^2$, the sum of squared discrete second
+differences. On the $72$ full-period seeds modulo~$9$ the curvature takes exactly three
+values, $\{648,972,1296\}$, each on $24$ seeds; the maximum $1296$ is attained precisely by
+the classical Fibonacci cycle $(1,1)$ and its rotations. This is a finite statement and we
+prove it by exhaustive enumeration. The curvature is the squared norm of a circulant
+operator and therefore has an exact Fourier form,
+$S=\frac{16}{N}\sum_{k}\sin^4(\pi k/N)\,|\hat d_k|^2$, which makes it a high-pass energy.
+Modulo~$9$ the Fibonacci class is also the class with the largest share of its curvature
+in the near-Nyquist half of the spectrum (about $98\%$), but this describes the maximizer
+rather than explaining it: at other moduli neither the near-Nyquist energy nor its share
+reliably identifies the maximizing orbit. We also show that modulo~$9$ the rule
+$0\mapsto 9$ does not affect $S$ at all---raw residues $0,\dots,8$ give the same three
+values---because every orbit negates itself after half a period. Finally we report how far the maximality
+property extends to other moduli (it is a small-modulus phenomenon, not a law) and retire
+a conjecture from earlier versions of this note. This version corrects errors in
+Versions~1--4; see the revision history in Section~\ref{sec:errata}.
+\end{abstract}
+
+\noindent\textbf{Keywords:} Fibonacci numbers; Pisano period; digital root;
+discrete curvature; circulant operator; discrete Fourier transform.
+
+\section{Introduction}
+
+Let $F(n)$ be the Fibonacci numbers, $F(0)=0$, $F(1)=1$. The sequence $F(n)\bmod 9$ has
+Pisano period $24$~\cite{Wall1960}. Replacing each residue $0$ by $9$ (the digital-root
+convention used in base~$10$, since the digital root of a positive integer equals its
+value modulo~$9$ with $0\mapsto 9$; the digital root of $0$ itself is $0$~\cite{OEIS})
+yields the familiar cycle
+\[
+1,1,2,3,5,8,4,3,7,1,8,9,8,8,7,6,4,1,5,6,2,8,1,9.
+\]
+This $24$-tuple is well known, but its higher-order difference statistics are not usually
+examined. We attach to every modulo-$9$ orbit a single number---its \emph{digital
+curvature}, the energy of its discrete second difference---and ask what values that number
+takes.
+
+The answer modulo~$9$ is a clean trichotomy (Theorem~\ref{thm:trichotomy}). The
+curvature functional is the squared norm of the cyclic second-difference operator, which
+is circulant and hence diagonalized by the discrete Fourier transform. This gives an exact
+spectral formula for $S$ (Proposition~\ref{prop:spectral}), which turns the opaque integer
+$S$ into an interpretable high-pass energy. The formula does not by itself prove the
+classification, which rests on enumeration, and at general moduli it does not identify
+the maximizing orbit (Section~\ref{sec:maximality}); we use it as a description, not a
+derivation. The spectral identity is a standard fact of harmonic analysis on the cycle;
+what is (to our knowledge) not previously recorded is its application to the digital-root
+orbits of a Pisano period.
+
+We have tried to be careful about what is and is not established. The trichotomy is a
+theorem proved by finite computation. The spectral identity and the half-period negation
+property (Proposition~\ref{prop:halfneg}) are theorems. The statement that the Fibonacci
+orbit maximizes curvature is true for small moduli but fails for larger ones, and we
+report it as the bounded empirical fact that it is. Earlier versions of this note advanced
+a closed-form conjecture and a symmetry argument that turn out to be, respectively, a
+numerical coincidence and an error; Version~4 in turn overstated what the spectral picture
+explains and what had been verified. All of these are corrected below.
+
+\section{Definitions}\label{sec:defs}
+
+Fix a modulus $m\ge 2$ (we take $m=9$ unless stated otherwise) and let $P=\pi(m)$ be its
+Pisano period~\cite{Wall1960,Koshy2018}. For a seed $(a_0,a_1)\in(\mathbb Z/m\mathbb Z)^2$ generate the orbit
+\[
+a_{n+1}=a_n+a_{n-1}\pmod m .
+\]
+We restrict attention to seeds whose orbit has \emph{minimal period exactly $P$}
+(``full-period'' seeds); these are the orbits that realize the full Pisano cycle. The
+\emph{rotation class} of such a seed is the set of $P$ pairs $(a_n,a_{n+1})$ occurring
+along its orbit---equivalently, its $P$ cyclic shifts. Display
+each residue with
+\[
+d(r)=\begin{cases}m & r\equiv 0,\\ r & r\in\{1,\dots,m-1\},\end{cases}
+\]
+so displayed values lie in $\{1,\dots,m\}$. For $m=9$ this is the base-$10$ digital root;
+for other $m$ it is simply a choice of integer representatives. Write $r_n\in\{0,\dots,m-1\}$
+for the raw residues, so $d_n=d(r_n)$, and set
+\[
+\kappa_n=d_{n+1}-2\,d_n+d_{n-1}\in\mathbb Z,
+\qquad
+S=\sum_{n=0}^{P-1}\kappa_n^{2},
+\]
+all indices taken cyclically modulo $P$. We call $S$ the \emph{digital curvature} of the
+orbit. Two remarks and one proposition are worth making at the outset.
+
+\begin{rem}[Choice of representatives]\label{rem:reps}
+In general $S$ depends on which integer representatives of the residues are used. For
+example, the orbit of $(1,1)$ modulo~$11$ has $S=638$ with representatives in
+$\{0,\dots,10\}$ but $S=1430$ with the display $\{1,\dots,11\}$. Modulo~$9$, however,
+these two conventions give the same $S$ on every orbit (Proposition~\ref{prop:halfneg}),
+while the symmetric representatives $\{-4,\dots,4\}$ give yet another value ($648$ for the
+$(1,1)$ orbit). So $S$ is an invariant of a chosen integer presentation of the orbit, not
+of the abstract residue sequence. We fix the digital-root presentation throughout.
+\end{rem}
+
+\begin{prop}[Half-period negation]\label{prop:halfneg}
+Let $M=\begin{pmatrix}0&1\\1&1\end{pmatrix}$, the matrix that sends each pair
+$(a_n,a_{n+1})^{\mathsf T}$ of an orbit to the next pair $(a_{n+1},a_{n+2})^{\mathsf T}$.
+Suppose $P$ is even and $M^{P/2}\equiv -I\pmod m$. Then on
+every orbit
+\[
+d_n=m-r_{n+P/2}\qquad\text{for all }n,
+\]
+so $(Dd)_n=-(Dr)_{n+P/2}$ and the displayed and raw orbits have the same curvature $S$.
+Their curvature spectra agree mode by mode: $|\widehat{Dd}_k|=|\widehat{Dr}_k|$ for every
+$k$. Modulo~$9$ the hypothesis holds, since
+$M^{12}=\begin{pmatrix}F_{11}&F_{12}\\F_{12}&F_{13}\end{pmatrix}
+=\begin{pmatrix}89&144\\144&233\end{pmatrix}\equiv -I\pmod 9$.
+\end{prop}
+
+\begin{proof}
+$M^{P/2}\equiv -I$ gives $r_{n+P/2}\equiv -r_n\pmod m$. If $r_n\ne 0$ then
+$r_{n+P/2}=m-r_n$, so $m-r_{n+P/2}=r_n=d_n$; if $r_n=0$ then $r_{n+P/2}=0$, so
+$m-r_{n+P/2}=m=d_n$. The second difference annihilates the constant $m$, so
+$(Dd)_n=-(Dr)_{n+P/2}$. A sign and a cyclic shift change neither the sum of squares nor
+the modulus of any Fourier coefficient.
+\end{proof}
+
+Among the $118$ moduli $m\le 120$ with even Pisano period, $M^{P/2}\equiv -I$ holds for
+$43$, and the $(1,1)$ orbit has equal displayed and raw curvature at exactly those $43$.
+For every $m\le 300$ with even Pisano period we found no case of equal curvature without
+$M^{P/2}\equiv -I$, but we have not proved the converse.
+
+\begin{rem}[Curvature is a cyclic energy]
+$\kappa_n=(D d)_n$ where $D$ is the cyclic second-difference operator, so
+$S=\lVert Dd\rVert^2$ is the discrete Dirichlet-type energy of the displayed orbit on the
+cycle $C_P$. This observation drives everything in Section~\ref{sec:spectral}.
+\end{rem}
+
+\section{The Trichotomy Modulo 9}\label{sec:trichotomy}
+
+\begin{thm}\label{thm:trichotomy}
+Among the $72$ full-period seeds modulo~$9$, the digital curvature takes exactly the three
+values
+\[
+S\in\{648,\;972,\;1296\},
+\]
+each attained by exactly $24$ seeds (equivalently, by one full-period orbit apiece).
+Moreover $S=1296$ if and only if the seed lies in the rotation class of $(1,1)$, and then
+\[
+S=1296=\sum_{n=0}^{23}\kappa_n^2 .
+\]
+\end{thm}
+
+\begin{proof}
+There are $81$ ordered seeds $(a_0,a_1)\in\{1,\dots,9\}^2$; of these, $72$ generate orbits
+of minimal period $24$ and $9$ do not. Evaluating $S$ on each full-period orbit is a
+finite computation, carried out in the script of Section~\ref{sec:verify}; it returns the
+multiset $\{648{:}24,\,972{:}24,\,1296{:}24\}$, with the value $1296$ occurring exactly on
+the $24$ rotations of the $(1,1)$ orbit. A finite exhaustive check is a complete proof of a
+statement quantified over a finite set.
+\end{proof}
+
+The split of the $81$ seeds into $72$ of period $24$, $8$ of period $8$ (both entries
+divisible by $3$) and the fixed seed $(9,9)$ is already recorded in the comments to
+OEIS~A030132~\cite{OEIS}; what is new here is the curvature. By
+Proposition~\ref{prop:halfneg}, the same three values arise if the orbits are written with
+residues in $\{0,\dots,8\}$ instead.
+
+We stress that the enumeration \emph{is} the proof. Earlier versions of this note tried to
+derive the three values from a congruence argument; that argument is vacuous (all three
+values are divisible by $9$, so reduction modulo~$9$ cannot distinguish them) and has been
+removed. What survives from it is a correct structural observation about \emph{which}
+orbits carry the three values.
+
+\begin{rem}[The three values are the three unit classes]\label{rem:units}
+The unit group $(\mathbb Z/9\mathbb Z)^\times=\{1,2,4,5,7,8\}$ acts on orbits by
+$a_n\mapsto g\,a_n$. \emph{At the level of residues}, $F_{n+12}\equiv -F_n\pmod 9$, so
+negation $g=-1\equiv 8$ maps the $(1,1)$ orbit to its own shift by $12$; hence the subgroup
+$\{\pm1\}$ fixes each orbit and the six units collapse to the three classes
+\[
+\{\pm1\}=\{1,8\},\quad \{\pm2\}=\{2,7\},\quad \{\pm4\}=\{4,5\},
+\]
+i.e.\ $(\mathbb Z/9\mathbb Z)^\times/\{\pm1\}$. Scaling the $(1,1)$ orbit by a
+representative of each class gives precisely the three curvature values:
+\[
+g\in\{1,8\}\!\to\!1296,\qquad g\in\{2,7\}\!\to\!972,\qquad g\in\{4,5\}\!\to\!648,
+\]
+verified directly. So the trichotomy is the statement that curvature is an invariant of
+$(\mathbb Z/9\mathbb Z)^\times/\{\pm1\}$, taking distinct values on its three classes.
+(This residue-level symmetry is what makes the unit-class action well defined. It does
+not survive as an exact antisymmetry of the second differences once the residues are
+written as integers in $\{1,\dots,9\}$, or in $\{0,\dots,8\}$; see
+Section~\ref{sec:halves}.)
+\end{rem}
+
+Table~\ref{tab:kappa} records the second differences of the maximal $(1,1)$ orbit, for use
+below. One checks directly that $\sum_n\kappa_n=0$ and $\sum_n\kappa_n^2=1296$.
+
+\begin{table}[!ht]
+\centering
+\[
+\begin{array}{c|cccccccccccc}
+n & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11\\\hline
+a_n & 1 & 1 & 2 & 3 & 5 & 8 & 4 & 3 & 7 & 1 & 8 & 9\\
+\kappa_n & 8 & 1 & 0 & 1 & 1 & -7 & 3 & 5 & -10 & 13 & -6 & -2
+\end{array}
+\]
+\[
+\begin{array}{c|cccccccccccc}
+n & 12 & 13 & 14 & 15 & 16 & 17 & 18 & 19 & 20 & 21 & 22 & 23\\\hline
+a_n & 8 & 8 & 7 & 6 & 4 & 1 & 5 & 6 & 2 & 8 & 1 & 9\\
+\kappa_n & 1 & -1 & 0 & -1 & -1 & 7 & -3 & -5 & 10 & -13 & 15 & -16
+\end{array}
+\]
+\caption{Second differences for the $(1,1)$ orbit. $\sum\kappa_n=0$, $\sum\kappa_n^2=1296$.}
+\label{tab:kappa}
+\end{table}
+
+\section{Curvature as Spectral Energy}\label{sec:spectral}
+
+The cyclic second-difference operator $D$ on length-$N$ sequences is circulant, hence
+diagonalized by the discrete Fourier transform~\cite{Davis1979}. This yields an exact formula for $S$.
+
+\begin{prop}\label{prop:spectral}
+Let $d=(d_0,\dots,d_{N-1})$ be the displayed orbit (of length $N=P$), with unnormalized DFT
+$\hat d_k=\sum_{n}d_n e^{-2\pi i kn/N}$. Then
+\[
+S=\frac1N\sum_{k=0}^{N-1}\mu_k^2\,|\hat d_k|^2,
+\qquad
+\mu_k=2\cos\!\frac{2\pi k}{N}-2=-4\sin^2\!\frac{\pi k}{N},
+\]
+equivalently
+\[
+\boxed{\;S=\frac{16}{N}\sum_{k=0}^{N-1}\sin^4\!\Big(\frac{\pi k}{N}\Big)\,|\hat d_k|^2.\;}
+\]
+\end{prop}
+
+\begin{proof}
+$\kappa_n=(Dd)_n=d_{n+1}-2d_n+d_{n-1}$ with indices modulo $N$, so $D$ is the circulant
+matrix with symbol $e^{2\pi i k/N}-2+e^{-2\pi i k/N}=2\cos(2\pi k/N)-2=\mu_k$. The Fourier
+modes $e^{2\pi i kn/N}$ are its eigenvectors with eigenvalues $\mu_k$, so
+$\widehat{Dd}_k=\mu_k\hat d_k$. By Parseval, $S=\lVert Dd\rVert^2=\frac1N\sum_k|\mu_k\hat
+d_k|^2=\frac1N\sum_k\mu_k^2|\hat d_k|^2$, and $\mu_k^2=16\sin^4(\pi k/N)$.
+\end{proof}
+
+This is standard harmonic analysis on the cycle; we record it only because it converts the
+opaque integer $S$ into something interpretable. The weight $16\sin^4(\pi k/N)$ vanishes at
+the constant mode $k=0$, grows monotonically across $k=1,\dots,\lfloor N/2\rfloor$, and is
+maximal at the Nyquist mode $k=N/2$ (which exists because $N=\pi(m)$ is even for
+$m\ge 3$). Thus \emph{digital curvature is a high-pass energy}: it ignores the orbit's mean
+and slow variation and rewards rapid, near-alternating oscillation. Call the modes with
+$\sin^2(\pi k/N)\ge\frac12$---equivalently $N/4\le k\le 3N/4$---the \emph{near-Nyquist
+half} of the spectrum, and write
+\[
+B=\frac{16}{N}\sum_{N/4\le k\le 3N/4}\sin^4\!\Big(\frac{\pi k}{N}\Big)\,|\hat d_k|^2
+\]
+for the part of $S$ it carries. We call $B$ the \emph{near-Nyquist energy} and $B/S$ the
+\emph{near-Nyquist share}; the two can rank orbits differently
+(Section~\ref{sec:maximality}).
+
+For the maximal $(1,1)$ orbit ($N=24$, $S=1296$), Table~\ref{tab:spectrum} gives the
+per-mode contribution $c_k=\frac1N\mu_k^2|\hat d_k|^2$. Conjugate modes $k$ and $N-k$
+contribute equally, so $S=c_0+2\sum_{k=1}^{11}c_k+c_{12}$. The near-Nyquist half carries
+about $97.6\%$ of $S$ for this orbit; the constant and low-frequency modes carry the
+remaining $2.4\%$.
+
+\begin{table}[!ht]
+\centering
+\begin{tabular}{rrrr}
+\toprule
+$k$ & $16\sin^4(\pi k/24)$ & $|\hat d_k|^2/N$ & $c_k$\\
+\midrule
+0  & 0.0000  & 570.375 & 0.000\\
+1  & 0.0046  & 17.919  & 0.083\\
+2  & 0.0718  & 3.375   & 0.242\\
+3  & 0.3431  & 19.125  & 6.563\\
+4  & 1.0000  & 3.375   & 3.375\\
+5  & 2.1974  & 2.331   & 5.122\\
+6  & 4.0000  & 3.375   & 13.500\\
+7  & 6.3385  & 2.331   & 14.774\\
+8  & 9.0000  & 3.375   & 30.375\\
+9  & 11.6569 & 19.125  & 222.937\\
+10 & 13.9282 & 3.375   & 47.008\\
+11 & 15.4595 & 17.919  & 277.022\\
+12 & 16.0000 & 3.375   & 54.000\\
+\bottomrule
+\end{tabular}
+\caption{Spectral decomposition of the $(1,1)$ orbit's curvature. Conjugate modes $k$ and
+$24-k$ contribute equally, so $S=c_0+2\sum_{k=1}^{11}c_k+c_{12}=1296$. The weight
+$16\sin^4(\pi k/24)$ rises with frequency; the contributions $c_k$ do not (they drop from
+$k=3$ to $4$, $9$ to $10$, and $11$ to $12$). The dominant pairs are $k=11,13$ ($277.0$
+each) and $k=9,15$ ($222.9$ each), with the Nyquist mode $k=12$ contributing $54.0$. The
+near-Nyquist half
+($\sin^2(\pi k/24)\ge\frac12$, i.e.\ $6\le k\le 18$) accounts for about $97.6\%$ of $S$.}
+\label{tab:spectrum}
+\end{table}
+
+\begin{rem}[The maximizer is the highest-frequency class]
+The three modulo-$9$ classes are ordered by how much of their curvature sits in the
+near-Nyquist half: it is $97.6\%$ of $S$ for the $1296$ class, against $94.0\%$ and
+$86.6\%$ for the $972$ and $648$ classes. So among the three full-period orbit classes
+modulo~$9$, the Fibonacci class is the one whose curvature is most concentrated near the
+Nyquist frequency. This is a diagnosis, not a derivation: because $S$ \emph{is} the
+high-pass energy, the statement reformulates maximality spectrally but does not explain
+why the $(1,1)$ seed produces the most near-Nyquist spectrum in the first place
+(see Section~\ref{sec:open}). At other moduli the description does not even identify the
+maximizer (Section~\ref{sec:maximality}).
+\end{rem}
+
+\subsection{The half-period asymmetry, corrected}\label{sec:halves}
+
+The identity $F_{n+12}\equiv -F_n\pmod 9$, a case of Proposition~\ref{prop:halfneg},
+suggests the second differences should satisfy $\kappa_{n+12}=-\kappa_n$, which would force the two
+half-period curvature sums to be equal. \emph{This is false}, and Version~2 of this note
+relied on it in error. The relation $\kappa_{n+12}=-\kappa_n$ holds for $n=1,\dots,9$ but
+breaks at $n=0,10,11$---exactly the index pairs adjacent to the zeros of the orbit at
+positions $11$ and $23$. Consequently the halves are \emph{unequal}:
+\[
+\sum_{n=0}^{11}\kappa_n^2=459,\qquad \sum_{n=12}^{23}\kappa_n^2=837,\qquad 459+837=1296,
+\]
+and the entire imbalance $837-459=378$ comes from those three index pairs.
+
+Version~4 attributed the break to the display rule $d(0)=9$. That is not the cause. The
+residues do satisfy $r_{n+12}\equiv -r_n$, but integer representatives turn this into an
+exact antisymmetry only if the representative system is closed under negation. Neither
+$\{1,\dots,9\}$ nor $\{0,\dots,8\}$ is: with either one, the representatives of $x$ and
+$-x$ sum to $9$ when $x\ne 0$ but to $18$ (respectively $0$) when $x=0$. Away from the
+zeros the constant offset $9$ is invisible to $D$; next to them it is not. Raw residues
+therefore break the antisymmetry at the same three indices, with the two halves exchanged
+($837$ and $459$, as Proposition~\ref{prop:halfneg} predicts). With the symmetric
+representatives $\{-4,\dots,4\}$, which are closed under negation, the antisymmetry is
+exact and the halves are equal, $324$ and $324$, for a total of $648$. In the digital-root
+presentation the curvature does not split evenly across the period, and the factorization
+$1296=2\cdot 648$ is not explained by half-period symmetry.
+
+\section{How Far Maximality Extends}\label{sec:maximality}
+
+It is natural to ask whether the Fibonacci seed maximizes digital curvature for every
+modulus. It does not. Define, for any modulus $m$ with even Pisano period, $S_{\max}(m)$ as
+the maximum of $S$ over full-period orbits, computed with the same display convention.
+
+\begin{description}
+\item[Small moduli.] Among moduli $m\le 14$ with even Pisano period, $(1,1)$ attains
+$S_{\max}(m)$ in every case; the first failure is $m=15$.
+\item[Erosion with scale.] Over the $118$ moduli $m\le 120$ with even Pisano period,
+$(1,1)$ attains $S_{\max}(m)$ for $78$ of them and fails for $40$. The first three failures
+are $m=15,33,40$ (and these are the only failures below $41$); the full failure list is
+\[
+\begin{aligned}
+&15,33,40,45,49,52,53,56,59,60,64,65,67,68,71,74,80,81,83,85,\\
+&86,88,90,91,92,93,97,98,103,104,105,106,107,108,109,111,115,117,118,120 .
+\end{aligned}
+\]
+The proportion of failures broadly increases with $m$ (reaching $60$--$70\%$ among moduli
+in the $80$s--$100$s), though not monotonically.
+\item[No arithmetic predictor.] No simple arithmetic rule we tested separates the failures
+from the successes. In particular ``$5\mid m$'' fails badly in both directions ($33$ is a
+failure with $5\nmid 33$; $20,25,30,35$ are multiples of $5$ for which $(1,1)$ still wins).
+\end{description}
+
+\paragraph{What the spectral picture does not say.} Version~4 claimed that ``in every
+exceptional case we examined'' the actual maximizer is the orbit with the most near-Nyquist
+energy.
+That is false under either reading of ``most'' (Section~\ref{sec:spectral} defines the
+near-Nyquist energy $B$ and share $B/S$).
+\begin{itemize}
+\item \emph{Share.} At $m=40$ the maximizer, the orbit of $(0,3)$ with $S=58320$, has
+share $93.7\%$, against $88.8\%$ for $(1,1)$ with $S=51920$. But the orbit of $(0,13)$ has
+the same curvature as $(1,1)$, $S=51920$, and share $96.1\%$. Among the $40$ failures
+listed above, no curvature maximizer has the largest share in $24$ cases, and at $m=118$
+the maximizer's share is slightly below that of $(1,1)$ ($93.94\%$ against $93.99\%$).
+\item \emph{Energy.} At $m=71$ the maximizer, the orbit of $(0,17)$, has $S=242110$ and
+$B\approx 229974.2$, while the orbit of $(0,29)$ has the smaller $S=240406$ but the
+larger $B\approx 232216.4$. Over all $118$ moduli $m\le 120$ with even Pisano period, the
+curvature maximizer fails to maximize $B$ at $m=70,71,75,91,102$.
+\end{itemize}
+What does hold over this range is weaker: at each of the $40$ failures the maximizer has
+strictly larger $B$ than the $(1,1)$ orbit. The spectral identity describes where the
+curvature of an orbit lives; it does not identify which orbit has the most.
+
+\section{What Does Not Hold}\label{sec:negatives}
+
+We record two negative results, both retiring claims from earlier versions, because closing
+off false directions is part of the contribution.
+
+\begin{description}
+\item[The closed form $S_{\max}=m(\pi(m)/2)^2$ is a coincidence.] Among the moduli
+$m\le 300$ with even Pisano period it holds at exactly $m=9$ ($1296$) and $m=27$
+($34992$); it also fails at $m=729$. It fails already at $m=3$ (actual $36$, predicted
+$48$), and on the next powers of three at $m=81$ (actual $857304$, predicted $944784$) and
+$m=243$ (actual $21677544$, predicted $25509168$). We have not proved that it fails for
+every larger $m$, but nothing in the data supports it. The appealing reading
+$1296=9F_{12}=9\cdot 144$ is numerology specific to $m=9$. There is no closed form for
+$S_{\max}(m)$ supported by the data.
+\item[The phenomenon does not carry over to $a_{n+1}=a_n+2a_{n-1}$.] This recurrence is
+invertible modulo $m$ exactly when $m$ is odd. With the same display convention, for every
+odd $m$ with $5\le m\le 101$ the orbit of $(0,1)$ (which contains $(1,1)$) does not attain
+the largest $S$ among orbits of the same minimal period; at $m=3$ it is the only orbit of
+that period. Version~4 also made claims about the recurrence $a_{n+1}=2a_n+a_{n-1}$ and the
+Tribonacci recurrence without stating definitions or a search range; we withdraw them.
+\end{description}
+
+\section{Computational Verification}\label{sec:verify}
+
+The script \texttt{papers/v5/reproduce.py} in the project repository asserts each exact
+numerical claim in this note, and each finite-range claim over the range stated: the
+trichotomy and seed-period split (Theorem~\ref{thm:trichotomy}); the representative
+comparisons of Remark~\ref{rem:reps} and Section~\ref{sec:halves}; the half-period
+negation property and its finite-range companion (Proposition~\ref{prop:halfneg}); the
+unit-class scalings (Remark~\ref{rem:units}); the second differences and half sums
+(Table~\ref{tab:kappa}); the spectral identity on five orbits
+(Proposition~\ref{prop:spectral}); the spectral table and the three near-Nyquist shares;
+the maximality sweep, full failure list and decade proportions; the near-Nyquist energy and
+share counterexamples and the count of failures without a unit-multiple maximizer
+(Sections~\ref{sec:maximality} and~\ref{sec:open}); the closed-form check; and the
+$a_{n+1}=a_n+2a_{n-1}$ sweep (Section~\ref{sec:negatives}). Spectral quantities are
+computed in floating point, and every comparison the script asserts has a margin far
+larger than rounding error. It uses only the Python standard library.
+
+The original \texttt{verify\_curvature.py}, which accompanies Versions~1--3, independently
+checks the trichotomy only. The Version~5 corrections follow an independent fact-check of
+Version~4, which re-derived its numerical claims with separate code.
+
+\section{Revision History and Errata}\label{sec:errata}
+
+This is Version~5. It supersedes Versions~1--4
+(\href{https://doi.org/10.5281/zenodo.15811767}{doi:10.5281/zenodo.15811767}), which
+remain available as the historical record.
+
+\paragraph{Corrections in Version~5 (to Version~4).}
+\begin{itemize}
+\item \textbf{The spectral maximizer claim was false.} Version~4 said that in every
+exceptional case it examined the curvature maximizer is the orbit with the most
+near-Nyquist energy, and asked for a proof that this always holds. Counterexamples exist for both the energy
+and the share readings, including $m=40$ and $m=71$ (Section~\ref{sec:maximality}).
+\item \textbf{The convention-dependence remark was false for $m=9$.} Version~4 said that
+residues in $\{0,\dots,m-1\}$ give a different $S$. Modulo~$9$ they give the same $S$ on
+every orbit (Proposition~\ref{prop:halfneg}); the dependence is real at other moduli
+(Remark~\ref{rem:reps}).
+\item \textbf{The half-period asymmetry was misattributed.} It is caused by using
+representatives not closed under negation, not by the rule $d(0)=9$; raw residues break
+it at the same indices (Section~\ref{sec:halves}).
+\item \textbf{The verification claim was overstated.} Version~4 said its script
+reproduces every numerical claim and that every claim had been checked by two independent
+implementations. Its script did not test the spectral maximizer claim, the
+other-recurrence claims, or the unit-multiple count, printed the near-Nyquist percentages
+without asserting them, and checked the closed form only at five moduli; the original
+script checks only the trichotomy. Section~\ref{sec:verify} now
+states what is checked.
+\item \textbf{Finite searches were stated as universal.} ``It never holds off the powers
+of three'' is replaced by the range actually searched (Section~\ref{sec:negatives}).
+\item \textbf{The other-recurrence claims are made precise or withdrawn}
+(Section~\ref{sec:negatives}).
+\item \textbf{Wording.} The abstract and introduction said the spectral identity explains
+the classification and that the maximizer follows from it; it only reformulates it. The
+spectral-table caption said the contributions rise with frequency; only the weight does.
+The abstract wrote $\hat a_k$ for $\hat d_k$. The digital-root remark now says
+``positive integer'' (the digital root of $0$ is $0$). The assumption $m\ge 2$ is stated,
+and the Nyquist mode is noted to exist only because $\pi(m)$ is even for $m\ge 3$. The
+failure list is now given in full. The seed-period split is credited to OEIS~A030132.
+\end{itemize}
+
+\paragraph{Corrections in Version~4 (to Versions~1--3).}
+\begin{itemize}
+\item \textbf{The trichotomy is proved by enumeration.} The congruence/``scaling''
+argument offered as a proof in Versions~1--3 is vacuous (all three curvature values are
+divisible by~$9$) and has been replaced by the finite verification, which is the actual
+proof. The valid residue of that argument---the three values as the three classes of
+$(\mathbb Z/9\mathbb Z)^\times/\{\pm1\}$---is kept as Remark~\ref{rem:units}.
+\item \textbf{The half-period symmetry claim was wrong.} Version~2 asserted
+$S=2\sum_{n=0}^{11}\kappa_n^2$ from an antisymmetry that fails for these integer
+representatives; the true halves are $459$ and $837$ (Section~\ref{sec:halves}).
+Version~3 already withdrew the explicit formula.
+\item \textbf{The conjecture $S_{\max}=m(\pi(m)/2)^2$ is false}
+(Section~\ref{sec:negatives}); it is a two-point coincidence at $m=9,27$.
+\item \textbf{Section~6's ``explanation'' was replaced} by the spectral identity
+(Section~\ref{sec:spectral}). Version~4 called the identity the reason the maximum is what
+it is; that overstated it (see above).
+\item \textbf{The novelty claim is softened.} We claim only that we are not aware of prior
+work applying this spectral/Dirichlet-energy lens to the digital-root orbits of a Pisano
+period; the underlying circulant diagonalization is classical. A search of OEIS
+(A030132 and neighbours) and of MathSciNet for ``digital root'' and ``Pisano period''
+turned up no prior treatment of these second-difference statistics, but we make no
+exhaustive-priority claim.
+\end{itemize}
+
+\section{Open Questions}\label{sec:open}
+
+\begin{itemize}
+\item Characterize the moduli for which $(1,1)$ fails to maximize curvature
+(Section~\ref{sec:maximality}). No arithmetic predictor was found, and $15$ of the $40$
+failures with $m\le 120$ have no maximizing orbit that is a unit multiple of the Fibonacci
+orbit.
+\item Find a criterion, spectral or arithmetic, that does identify the curvature
+maximizer; neither the near-Nyquist energy $B$ nor the share $B/S$ does
+(Section~\ref{sec:maximality}).
+\item Prove or refute the converse of Proposition~\ref{prop:halfneg}: is the curvature of
+the $(1,1)$ orbit the same in both presentations only when $M^{P/2}\equiv -I\pmod m$? This
+holds for every $m\le 300$ with even Pisano period.
+\item Is the $S_{\max}=m(\pi(m)/2)^2$ coincidence at $m=9,27$ part of any larger pattern,
+or genuinely isolated?
+\end{itemize}
+
+\section*{Disclosure statement}
+\noindent The author reports no competing interests.
+
+\begin{thebibliography}{9}
+
+\bibitem{Wall1960}
+D.~D.~Wall,
+``Fibonacci Series Modulo $m$,''
+\textit{Amer.\ Math.\ Monthly} \textbf{67} (1960), 525--532.
+
+\bibitem{OEIS}
+OEIS~A030132, ``Digital root of Fibonacci($n$).''
+
+\bibitem{Koshy2018}
+T.~Koshy,
+\textit{Fibonacci and Lucas Numbers with Applications},
+Wiley (2018).
+
+\bibitem{Davis1979}
+P.~J.~Davis,
+\textit{Circulant Matrices},
+Wiley (1979).
+
+\end{thebibliography}
+
+\end{document}
